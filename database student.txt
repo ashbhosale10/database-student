@@ -1,0 +1,241 @@
+xml file
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/teal_200">>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter Student Info"
+        android:textSize="29sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="50dp"
+        android:textStyle="bold"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+         <TextView
+             android:layout_marginTop="40sp"
+            android:layout_width="wrap_content"
+            android:layout_height="30sp"
+            android:textSize="20sp"
+            android:text="Enter Roll No :"
+             android:textStyle="bold"
+             android:layout_marginLeft="10sp"/>
+        <EditText
+            android:layout_marginTop="40sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Enter Student Roll_no"
+            android:textSize="20sp"
+            android:layout_marginLeft="20sp"
+            android:id="@+id/e1"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_marginTop="30sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Student name : "
+            android:textStyle="bold"
+            android:layout_marginLeft="10sp"
+            android:textSize="20sp"/>
+        <EditText
+            android:id="@+id/e2"
+            android:layout_marginTop="30sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Enter Student Name"
+            android:layout_marginLeft="15sp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/t3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="Class :"
+            android:textStyle="bold"
+            android:layout_marginLeft="10sp"
+            android:layout_marginTop="30sp"/>
+        <EditText
+            android:id="@+id/e3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="enter class"
+            android:textSize="20sp"
+            android:layout_marginLeft="90sp"
+            android:layout_marginTop="30sp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/t4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10sp"
+            android:layout_marginTop="30sp"
+            android:text="Contact : "
+            android:textSize="20sp"
+            android:textStyle="bold" />
+        <EditText
+            android:id="@+id/e4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="enter contacts"
+            android:layout_marginTop="30sp"
+            android:textSize="20sp"
+            android:layout_marginLeft="62sp">
+
+        </EditText>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="80dp"
+            android:background="#fada22"
+            android:text="Insert"
+            android:id="@+id/b3" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Display"
+            android:layout_marginTop="80dp"
+            android:id="@+id/b4"
+            android:background="#fe1af6" />
+    </LinearLayout>
+</LinearLayout>
+
+mainActivity.java
+
+package com.example.slip1q3studenttable;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+
+    EditText et1, et2, et3 , et4;
+    TextView t1, t2, t3, t4;
+    Button bt1, bt2;
+
+
+    @SuppressLint("MissingInflatedId")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        et1 = findViewById(R.id.e1);
+        et2 = findViewById(R.id.e2);
+        et3 = findViewById(R.id.e3);
+        et4 = findViewById(R.id.e4);
+        bt1 = findViewById(R.id.b3);
+        bt2 = findViewById(R.id.b4);
+        database d = new database(this);
+       // SQLiteDatabase db = d.getReadableDatabase();
+        bt1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String Rollno = et1.getText().toString();
+                String name = et2.getText().toString();
+                String Class = et3.getText().toString();
+                String constact = et4.getText().toString();
+
+                if(Rollno.equals("")||name.equals("")||Class.equals("")||constact.equals(""))
+                {
+                    Toast.makeText(MainActivity.this, "Enter all fiels", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    boolean i = d.insert_data(Integer.parseInt(Rollno), name,Class,constact);
+                    if(i==true)
+                    {
+                        Toast.makeText(MainActivity.this, "Successful", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+    }
+}
+
+database.java
+
+package com.example.slip1q3studenttable;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+import androidx.annotation.Nullable;
+
+public class database extends SQLiteOpenHelper {
+    private static final String dbname = "shubham.db";
+    public database(@Nullable Context context){
+        super(context, dbname, null, 1);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        String q = "create table student(Roll_no text primary key autoincrement,name text , class text , contact text)";
+        sqLiteDatabase.execSQL(q);
+
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+        sqLiteDatabase.execSQL("drop table if exists users");
+        onCreate(sqLiteDatabase);
+    }
+    public boolean insert_data(int Rollno, String name , String Class , String Contact)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues c = new ContentValues();
+        c.put("RollNO",Rollno);
+        c.put("name",name);
+        c.put("Class",Class);
+        c.put("contact",Contact);
+        long r = db.insert("shubham",null,c);
+        if(r == -1)
+            return false;
+        else
+            return  true;
+
+    }
+}
